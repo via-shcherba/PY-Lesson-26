@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <h2>{{vacancy.profession}}</h2>
+        <p>{{vacancy.description}}</p>
+        <p><b>{{vacancy.salary}}</b></p>
+        <p><b>{{vacancy.city}}</b></p>       
+    </div>
+</div>
+{% endblock %}
