@@ -18,6 +18,7 @@ class Vacancy(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE, related_name='vacancies')
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='vacancies')
     salary = models.FloatField()
+    description = models.CharField(max_length=200, default=None)
 
     def __str__(self):
         return f"{self.profession.name} in {self.city.name} salary {self.salary}"  
