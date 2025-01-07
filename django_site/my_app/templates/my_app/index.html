@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+               
+    {% block content %}
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+        {% for item in vacancies %}
+        <!-- Post preview-->
+        <div class="post-preview">    
+            <a href="{% url 'my_app:vacancy' id=item.id %}">
+                <h2 class="post-title">{{item.profession}}</h2>
+                <h3 class="post-subtitle">{{item.salary}}</h3>
+            </a>
+            <p class="post-meta">
+                {{item.city}}
+            </p>
+        </div>
+        <!-- Divider-->
+        <hr class="my-4" />
+        {% endfor %}
+        <!-- Pager-->
+        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+        </div>
+    </div>
+    {% endblock %}    

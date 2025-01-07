@@ -1,8 +1,5 @@
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.shortcuts import render
-<<<<<<< Updated upstream
-
-# Create your views here.
-=======
 from django.urls import reverse, reverse_lazy
 from .models import Vacancy, Tag
 from .forms import VacancyForm
@@ -92,4 +89,3 @@ class TagDeleteView(DeleteView):
     template_name = 'my_app/tag_delete_confirm.html'
     model = Tag
     success_url = reverse_lazy('my_app:tag_list')
->>>>>>> Stashed changes
