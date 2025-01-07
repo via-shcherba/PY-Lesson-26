@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{name}}</h1>
+<ul>
+    {% for item in tags %}
+    <li>
+        <a href="{% url 'my_app:tag_detail' pk=item.pk %}">
+            {{item.name}}
+        </a>
+        /
+        <a href="{% url 'my_app:tag_update' pk=item.pk %}">
+            Edit
+        </a>
+        /
+        <a href="{% url 'my_app:tag_delete' pk=item.pk %}">
+            Delete
+        </a> 
+    </li>
+    {% endfor %}
+
+    <a href="{% url 'my_app:tag_create' %}">Create</a> 
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        {{object.name}}
+    </div>
+    <p>Tag created: {{object.created}}</p> 
+    <p>Tag updated: {{object.updated}}</p>  
+
+    <a href="{% url 'my_app:tag_update' pk=object.pk %}">
+        Edit
+    </a>
+</div>
+{% endblock %}
