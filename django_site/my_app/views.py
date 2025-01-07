@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from .models import Vacancy, Tag
-from .forms import VacancyForm
+from .forms import VacancyForm, TagForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
 
@@ -65,14 +65,10 @@ class TagDetailView(DetailView, NameContextMixin):
     
 
 class TagCreateView(CreateView, NameContextMixin):
-    
-    fields = '__all__'
+    form_class = TagForm 
     model = Tag
     success_url = reverse_lazy('my_app:tag_list')
     template_name = 'my_app/tag_create.html'
-
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         return super().form_valid(form)
