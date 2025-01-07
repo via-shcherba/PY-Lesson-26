@@ -21,3 +21,9 @@ class Vacancy(models.Model):
 
     def __str__(self):
         return f"{self.profession.name} in {self.city.name} salary {self.salary}"  
+
+class Tag(models.Model):
+    name = models.CharField(max_length=16, unique=True)
+
+    def __str__(self):
+        return self.name
