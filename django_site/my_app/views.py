@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from .models import Vacancy, Tag
 from .forms import VacancyForm, TagForm
@@ -13,15 +14,18 @@ def main_view(request):
     return render(request, 'my_app/index.html', context={'vacancies' : vacancies})
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def show_vacancy(request, id):
     vacancy = get_object_or_404(Vacancy, id=id)
     return render(request, 'my_app/vacancy.html', context={'vacancy': vacancy})
 
 
+@login_required
 def create_vacancy(request):
     if request.method == 'POST':
         form = VacancyForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
             form.save()
             return HttpResponseRedirect(reverse('my_app:index'))
         else:
@@ -52,9 +56,13 @@ class TagListView(ListView, NameContextMixin):
         return Tag.objects.all()
 
 
-class TagDetailView(DetailView, NameContextMixin):
+class TagDetailView(UserPassesTestMixin, DetailView, NameContextMixin):
     model = Tag
     template_name = 'my_app/tag_detail.html'
+    raise_exception = False
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         self.tag_id = kwargs['pk']
@@ -64,7 +72,7 @@ class TagDetailView(DetailView, NameContextMixin):
         return get_object_or_404(Tag, pk=self.tag_id)
     
 
-class TagCreateView(CreateView, NameContextMixin):
+class TagCreateView(LoginRequiredMixin, CreateView, NameContextMixin):
     form_class = TagForm 
     model = Tag
     success_url = reverse_lazy('my_app:tag_list')
