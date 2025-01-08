@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from my_app.models import City, Profession, Vacancy
+from usersapp.models import StandardUser
 
 class Command(BaseCommand):
     help = 'Заполнение базы данных данными'
@@ -12,6 +13,11 @@ class Command(BaseCommand):
         professions = ['Программист', 'Дизайнер', 'Аналитик', 'Менеджер']
         for profession_name in professions:
             Profession.objects.get_or_create(name=profession_name)
+
+        user = StandardUser.objects.first()  
+        if not user:
+            self.stdout.write(self.style.ERROR('Не найден пользователь!'))
+            return
 
         vacancies = [
             {'profession': 'Программист', 'city': 'Москва', 'salary': 100000, 'description': 'Работа в офисе. Требуется опыт в продакшене от 3 лет'},
@@ -27,7 +33,8 @@ class Command(BaseCommand):
                 profession=profession_obj,
                 city=city_obj,
                 salary=vacancy['salary'],
-                description=vacancy['description']
+                description=vacancy['description'],
+                user=user  
             )
 
         self.stdout.write(self.style.SUCCESS('База данных успешно заполнена!'))
