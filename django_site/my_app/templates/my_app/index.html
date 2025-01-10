@@ -2,6 +2,7 @@
                
     {% block content %}
     <div class="row gx-4 gx-lg-5 justify-content-center">
+        Amount of vacancies on the page: {{vacancies|length}}
         <div class="col-md-10 col-lg-8 col-xl-7">
         {% for item in vacancies %}
         <!-- Post preview-->
@@ -17,8 +18,24 @@
         <!-- Divider-->
         <hr class="my-4" />
         {% endfor %}
+
         <!-- Pager-->
-        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+        <div class="d-flex justify-content-end mb-4">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if vacancies.has_previous %}
+                        <a href="?page={{ vacancies.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ vacancies.number }} of {{ vacancies.paginator.num_pages }}.
+                    </span>
+
+                    {% if vacancies.has_next %}
+
+                    <a class="btn btn-primary float-right" href="?page={{ vacancies.next_page_number }}">Older vacancies &rarr;</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
     </div>
     {% endblock %}    
