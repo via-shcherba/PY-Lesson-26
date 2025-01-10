@@ -6,12 +6,23 @@ from .models import Vacancy, Tag
 from .forms import VacancyForm, TagForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
 def main_view(request):
-    vacancies = Vacancy.objects.all()
-    return render(request, 'my_app/index.html', context={'vacancies' : vacancies})
+    vacancies = Vacancy.objects.filter(is_active=True)
+    paginator = Paginator(vacancies, 4)
+    page = request.GET.get('page')
+    try:
+        vacancies = paginator.page(page)
+    except PageNotAnInteger:
+        vacancies = paginator.page(1)
+    except EmptyPage:
+        vacancies = paginator.page(paginator.num_pages)
+        
+    title = 'need a job?'
+    return render(request, 'my_app/index.html', context={'vacancies' : vacancies, 'title': title})
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -53,7 +64,7 @@ class TagListView(ListView, NameContextMixin):
     context_object_name = 'tags'
 
     def get_queryset(self):
-        return Tag.objects.all()
+        return Tag.objects.filter(is_active=True)
 
 
 class TagDetailView(UserPassesTestMixin, DetailView, NameContextMixin):
