@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def main_view(request):
-    vacancies = Vacancy.objects.filter(is_active=True)
+    vacancies = Vacancy.active_objects.all()
     paginator = Paginator(vacancies, 4)
     page = request.GET.get('page')
     try:
@@ -64,7 +64,7 @@ class TagListView(ListView, NameContextMixin):
     context_object_name = 'tags'
 
     def get_queryset(self):
-        return Tag.objects.filter(is_active=True)
+        return Tag.active_objects.all()
 
 
 class TagDetailView(UserPassesTestMixin, DetailView, NameContextMixin):
