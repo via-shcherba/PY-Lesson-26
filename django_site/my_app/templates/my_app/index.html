@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
-               
-    {% block content %}
-    <div class="row gx-4 gx-lg-5 justify-content-center">
-        Amount of vacancies on the page: {{vacancies|length}}
-        <div class="col-md-10 col-lg-8 col-xl-7">
+
+{% block content %}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    Amount of vacancies on the page: {{ vacancies|length }}
+    <div class="col-md-10 col-lg-8 col-xl-7">
         {% for item in vacancies %}
         <!-- Post preview-->
+        {% with item_id=item.id item_profession=item.profession item_salary=item.salary item_city=item.city %}
         <div class="post-preview">    
-            <a href="{% url 'my_app:vacancy' id=item.id %}">
-                <h2 class="post-title">{{item.profession}}</h2>
-                <h3 class="post-subtitle">{{item.salary}}</h3>
+            <a href="{% url 'my_app:vacancy' id=item_id %}">
+                <h2 class="post-title">{{ item_profession }}</h2>
+                <h3 class="post-subtitle">{{ item_salary }}</h3>
             </a>
             <p class="post-meta">
-                {{item.city}}
+                {{ item_city }}
             </p>
         </div>
         <!-- Divider-->
         <hr class="my-4" />
+        {% endwith %}
         {% endfor %}
 
         <!-- Pager-->
@@ -31,11 +33,11 @@
                     </span>
 
                     {% if vacancies.has_next %}
-
-                    <a class="btn btn-primary float-right" href="?page={{ vacancies.next_page_number }}">Older vacancies &rarr;</a>
+                        <a class="btn btn-primary float-right" href="?page={{ vacancies.next_page_number }}">Older vacancies &rarr;</a>
                     {% endif %}
                 </span>
             </div>
         </div>
     </div>
-    {% endblock %}    
+</div>
+{% endblock %}

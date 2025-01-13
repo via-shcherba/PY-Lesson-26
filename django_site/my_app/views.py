@@ -7,22 +7,25 @@ from .forms import VacancyForm, TagForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.cache import cache_page
 
 # Create your views here.
 
+@cache_page(60 * 15)  # Кеширование на 15 минут
 def main_view(request):
-    vacancies = Vacancy.active_objects.all()
+    vacancies = Vacancy.active_objects.select_related('profession', 'city').all()  
     paginator = Paginator(vacancies, 4)
     page = request.GET.get('page')
+    
     try:
         vacancies = paginator.page(page)
     except PageNotAnInteger:
         vacancies = paginator.page(1)
     except EmptyPage:
         vacancies = paginator.page(paginator.num_pages)
-        
+
     title = 'need a job?'
-    return render(request, 'my_app/index.html', context={'vacancies' : vacancies, 'title': title})
+    return render(request, 'my_app/index.html', context={'vacancies': vacancies, 'title': title})
 
 
 @user_passes_test(lambda u: u.is_superuser)
