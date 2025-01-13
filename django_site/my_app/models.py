@@ -20,7 +20,7 @@ class IsActiveMixin(models.Model):
 
 class TimeStamp(models.Model):
     created = models.DateTimeField(default=timezone.now, verbose_name='Created Datetime')
-    updated = models.DateTimeField(auto_now=True, verbose_name='Updated Datetime')
+    updated = models.DateTimeField(auto_now=True, verbose_name='Updated Datetime', db_index=True)
 
     class Meta:
         abstract = True
