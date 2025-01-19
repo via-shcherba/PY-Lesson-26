@@ -34,7 +34,7 @@
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'my_app:contact' %}">Contact</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            Hi, {{user.username}}
+                            Hi, <a href="{% url 'users:profile' pk=user.pk %}">{{user.username}}</a>
                             <form method="post" action="{% url 'usersapp:logout' %}">
                                 {% csrf_token %}
                                 <button type="submit">Logout</button>
