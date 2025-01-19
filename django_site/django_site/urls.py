@@ -17,11 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from rest_framework import routers
+from my_app.api_views import TagViewSet, ProfessionViewSet
+
+router = routers.DefaultRouter()
+router.register(r'tags', TagViewSet)
+router.register(r'professions', ProfessionViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('my_app.urls', namespace='my_app')),
-    path('users/', include('usersapp.urls', namespace='users'))
+    path('users/', include('usersapp.urls', namespace='users')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/v0/', include(router.urls))
 ]
 
 if settings.DEBUG:
